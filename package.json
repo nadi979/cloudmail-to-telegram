@@ -1,0 +1,15 @@
+{
+    "name": "cloudmail-to-telegram",
+    "version": "2.0.0",
+    "description": "🚀 Cloudflare Email-to-Telegram Worker",
+    "main": "src/worker.js",
+    "scripts": {
+        "start": "node src/worker.js"
+    },
+    "dependencies": {
+        "node-fetch": "^3.3.2"
+    },
+    "devDependencies": {
+        "wrangler": "^3.11.0"
+    }
+}
